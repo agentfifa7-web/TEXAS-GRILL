@@ -14,7 +14,7 @@ Marché cible : Abidjan, Côte d'Ivoire — prix en FCFA (XOF), interface en fra
 |---|---|
 | **Frontend** | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4 |
 | **Backend** | Next.js Route Handlers + Server Actions, services métier séparés (`lib/services`) |
-| **Base de données** | PostgreSQL (production) / SQLite (développement, zéro configuration) via Prisma ORM |
+| **Base de données** | PostgreSQL (Neon, Supabase, Vercel Postgres…) via Prisma ORM |
 | **Authentification** | NextAuth v4 (email/mot de passe, JWT), RBAC par rôle |
 | **Design system** | Palette FIRE • GRILL • URBAN • PREMIUM (noir profond, orange feu, rouge barbecue, crème) |
 | **PWA** | Manifest, service worker, page hors-ligne, prompt d'installation |
@@ -56,7 +56,6 @@ lib/
 prisma/
   schema.prisma           Modèle de données complet (voir §5)
   seed.ts                 Données de démonstration
-  dev.db                  Base SQLite locale (généré, non versionné)
 
 public/images/            Illustrations de démonstration générées localement (voir §9)
 scripts/generate-placeholder-art.mjs
@@ -70,11 +69,13 @@ Prérequis : Node.js ≥ 20, [pnpm](https://pnpm.io).
 
 ```bash
 pnpm install
-cp .env.example .env          # DATABASE_URL="file:./dev.db" fonctionne tel quel
-pnpm db:push                  # crée le schéma SQLite local
+cp .env.example .env          # renseignez DATABASE_URL avec une vraie base PostgreSQL (Neon, Supabase…)
+pnpm db:push                  # crée le schéma dans cette base
 pnpm db:seed                  # données de démonstration (restaurants, menu, utilisateurs…)
 pnpm dev                      # http://localhost:3000
 ```
+
+Aucune base PostgreSQL sous la main pour du développement local rapide ? Créez-en une gratuite en 1 minute sur [neon.tech](https://neon.tech) ou [supabase.com](https://supabase.com).
 
 ### Comptes de démonstration (README uniquement — jamais de mot de passe réel)
 
@@ -90,7 +91,7 @@ Voir `.env.example` pour la liste complète et les commentaires. Résumé :
 
 | Variable | Rôle | Valeur par défaut (dev) |
 |---|---|---|
-| `DATABASE_URL` | Connexion Prisma | `file:./dev.db` (SQLite) |
+| `DATABASE_URL` | Connexion Prisma | URL PostgreSQL (Neon/Supabase/Vercel Postgres…), aucune valeur par défaut |
 | `AUTH_SECRET` | Signature des sessions NextAuth | à générer (`openssl rand -base64 32`) |
 | `NEXT_PUBLIC_MAP_PROVIDER` / `MAP_API_KEY` | Cartographie (`lib/services/map.ts`) | `STATIC` (carte de secours sans clé) |
 | `PAYMENT_PROVIDER` / `PAYMENT_API_KEY` | Paiement (`lib/services/payment.ts`) | `MOCK` (paiement simulé toujours réussi) |
@@ -104,7 +105,7 @@ Voir `.env.example` pour la liste complète et les commentaires. Résumé :
 
 Le schéma (`prisma/schema.prisma`) couvre l'intégralité du domaine métier : `User`, `Role`/`Permission` (RBAC), `Restaurant`/`RestaurantHours`/`Table`, `Reservation`, `MenuCategory`/`Product`/`ProductOption(Value)`/`ProductAddon`, `Cart`/`CartItem`, `Order`/`OrderItem`, `Payment`, `Delivery`/`Driver`, `Address`, `LoyaltyAccount`/`LoyaltyTransaction`/`Reward`, `Coupon`/`Promotion`, `Review`, `Favorite`, `Event`, `CorporateRequest`, `Story`/`Video`, `Notification`, `InventoryItem`/`StockMovement`, `AuditLog`.
 
-Le connecteur est **SQLite en développement** (zéro configuration, portable) et **PostgreSQL en production**. Pour rester compatible avec les deux moteurs sans dupliquer le schéma, les `enum` natifs et les colonnes tableau ne sont pas utilisés : les valeurs « enum-like » sont des `String` validées côté code (voir `lib/constants.ts`) et les listes sont stockées en JSON (`fooJson`, parsé via `lib/json.ts`).
+Le connecteur est **PostgreSQL** (même base en développement et en production — Neon/Supabase ont un plan gratuit largement suffisant pour développer). Les `enum` natifs et les colonnes tableau ne sont volontairement pas utilisés, ce qui garde le schéma portable vers SQLite si besoin (voir l'en-tête de `prisma/schema.prisma`) : les valeurs « enum-like » sont des `String` validées côté code (voir `lib/constants.ts`) et les listes sont stockées en JSON (`fooJson`, parsé via `lib/json.ts`).
 
 ### Migrations
 
@@ -113,12 +114,6 @@ pnpm db:migrate     # crée/applique une migration (dev)
 pnpm db:push        # synchronise le schéma sans migration versionnée (rapide, dev uniquement)
 pnpm db:studio      # explorateur de données Prisma Studio
 ```
-
-### Passer en production avec PostgreSQL
-
-1. Dans `prisma/schema.prisma`, remplacez `provider = "sqlite"` par `provider = "postgresql"`.
-2. Définissez `DATABASE_URL` vers une instance managée (Neon, Supabase, Vercel Postgres, RDS…).
-3. `pnpm db:migrate` pour générer l'historique de migration Postgres, puis `pnpm db:seed` si besoin.
 
 ### Seed
 

@@ -1,22 +1,21 @@
-// Texas GrillZ — Prisma schema
+// Texas Grill — Prisma schema
 //
-// Dev database: SQLite (zero-config, file-based) so the platform runs out of
-// the box in any environment without provisioning external infrastructure.
-// Production target: PostgreSQL (per the platform spec). To switch:
-//   1. Set `provider = "postgresql"` below.
-//   2. Point DATABASE_URL (see .env.example) at a managed Postgres instance
-//      (Neon, Supabase, Vercel Postgres, RDS...).
-//   3. Run `pnpm db:migrate` to (re)create the migration history.
+// Production datasource: PostgreSQL, e.g. a managed instance on Neon,
+// Supabase, Vercel Postgres, or RDS. Point DATABASE_URL (see .env.example)
+// at it and run `pnpm db:migrate` (or `pnpm db:push` for a quick sync) to
+// create the schema, then `pnpm db:seed` for demo data.
+//
 // The schema intentionally avoids native Prisma `enum` types and array
-// columns (not supported by SQLite) in favor of validated string fields and
-// JSON columns, so it works identically on both connectors — no model
-// changes needed when moving to Postgres.
+// columns in favor of validated string fields and JSON columns (see
+// lib/constants.ts) — this was originally so the schema could also run
+// unmodified against a local SQLite file for zero-config development;
+// switch `provider` below back to "sqlite" if you want that again.
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
