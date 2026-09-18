@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { getCartSummaryReadOnly } from '@/lib/actions/cart'
+import { getSiteUrl } from '@/lib/constants'
 import { Providers } from '@/components/providers/providers'
 import { Navbar } from '@/components/layout/navbar'
 import { Footer } from '@/components/layout/footer'
@@ -17,7 +18,7 @@ const bebas = Bebas_Neue({ subsets: ['latin'], weight: '400', variable: '--font-
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
+  metadataBase: new URL(getSiteUrl()),
   title: { default: 'Texas Grill — The Grill Experience', template: '%s | Texas Grill' },
   description: "Le goût du vrai grill, avec l'énergie d'Abidjan. Commandez en ligne, réservez une table ou faites-vous livrer vos grillades, burgers et ribs Texas Grill.",
   keywords: ['Texas Grill', 'restaurant Abidjan', 'grillades', 'burger Abidjan', 'livraison', 'barbecue', 'steak house'],

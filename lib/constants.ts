@@ -215,6 +215,17 @@ export const NOTIFICATION_TYPES = {
 
 export const NOTIFICATION_CHANNELS = ['EMAIL', 'SMS', 'PUSH', 'WHATSAPP', 'IN_APP'] as const
 
+/**
+ * Resolves the site's base URL for metadata/sitemap/robots. Uses `||`
+ * rather than `??` deliberately — hosting platforms (Vercel included) can
+ * set an env var to an empty string `''` rather than leaving it unset, and
+ * `new URL('')` throws `ERR_INVALID_URL`, which previously broke the
+ * production build.
+ */
+export function getSiteUrl(): string {
+  return process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+}
+
 export function formatXOF(amount: number): string {
   return new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(amount) + ' FCFA'
 }
