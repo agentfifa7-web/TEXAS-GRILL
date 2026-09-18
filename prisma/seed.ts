@@ -10,6 +10,15 @@ const productImg = (slug: string) => `/images/products/${slug}.svg`
 const restaurantImg = (slug: string) => `/images/restaurants/${slug}.svg`
 
 async function main() {
+  // Idempotency guard: this lets `db:seed` run automatically on every
+  // deploy (see package.json's "build" script) without duplicating demo
+  // orders/reservations/etc. on each run — it only ever seeds once.
+  const alreadySeeded = await prisma.restaurant.count()
+  if (alreadySeeded > 0) {
+    console.log('✅ Database already seeded — skipping.')
+    return
+  }
+
   console.log('🔥 Seeding Texas Grill demo data...')
 
   // ---- Roles & permissions (RBAC reference tables) -----------------------

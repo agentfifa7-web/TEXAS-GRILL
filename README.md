@@ -148,6 +148,8 @@ pnpm start
 
 Cible de déploiement recommandée : **Vercel** (Next.js natif) + **PostgreSQL managé** (Neon/Supabase/Vercel Postgres) + stockage objet (S3/Cloudinary) + Redis (cache, optionnel — non requis pour les fonctionnalités actuelles). Toutes les variables d'environnement de production doivent être définies dans le tableau de bord Vercel (ou équivalent), jamais commitées.
 
+**Provisioning automatique au déploiement** : le script `build` exécute `prisma db push` (crée/synchronise les tables) puis `prisma/seed.ts` (insère les données de démonstration — le script se rend idempotent en sautant s'il détecte que la base contient déjà des restaurants, donc redéployer ne duplique rien) avant `next build`. Ainsi, connecter une base Neon/Supabase vide dans Vercel et redéployer suffit à obtenir un site pleinement fonctionnel, sans commande manuelle. Pour un usage en production plus rigoureux (plusieurs environnements, historique de migrations versionné), remplacez `prisma db push` par `prisma migrate deploy` et retirez le seed automatique du build.
+
 ## 9. Illustrations de démonstration
 
 Le menu, les restaurants et les contenus (stories/vidéos) utilisent des illustrations SVG **générées localement** (`public/images/`, `scripts/generate-placeholder-art.mjs`) plutôt que des photos tierces hotlinkées — ceci évite toute dépendance à un service externe et toute question de droits d'usage sur des photos de stock. **Avant mise en production, remplacez ces illustrations par de vraies photographies** des plats et restaurants Texas Grill (voir `lib/services/storage.ts` pour l'upload une fois `STORAGE_PROVIDER` configuré).
