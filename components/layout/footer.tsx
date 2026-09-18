@@ -1,4 +1,7 @@
+'use client'
+
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Flame, Facebook, Instagram, Twitter } from 'lucide-react'
 
 const COLUMNS = [
@@ -36,6 +39,9 @@ const COLUMNS = [
 ]
 
 export function Footer() {
+  const pathname = usePathname()
+  if (pathname?.startsWith('/admin')) return null
+
   return (
     <footer className="bg-ink px-5 pb-6 pt-14 text-cream">
       <div className="container-grill grid grid-cols-1 gap-12 md:grid-cols-[1.2fr_2fr]">

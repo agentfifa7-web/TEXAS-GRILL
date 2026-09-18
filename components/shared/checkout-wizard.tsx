@@ -7,7 +7,7 @@ import { Bike, Check, CreditCard, Package, Smartphone, Store, Wallet } from 'luc
 import { useCart } from '@/components/providers/cart-provider'
 import { submitCheckoutAction } from '@/lib/actions/checkout'
 import { formatXOF, ORDER_TYPE_LABELS, PAYMENT_METHOD_LABELS, type OrderType } from '@/lib/constants'
-import type { CheckoutInput } from '@/lib/validations'
+import { PHONE_REGEX, type CheckoutInput } from '@/lib/validations'
 import { getTableSession, clearTableSession, type TableSessionData } from '@/lib/table-session'
 import { cn } from '@/lib/utils'
 
@@ -38,7 +38,7 @@ export function CheckoutWizard({
   defaultContact: { name: string; phone: string; email: string } | null
 }) {
   const router = useRouter()
-  const { items, subtotal, orderType, setOrderType } = useCart()
+  const { items, subtotal, orderType, setOrderType, refresh } = useCart()
   const [step, setStep] = useState(0)
   const [restaurantId, setRestaurantId] = useState(restaurants.find((r) => r.status === 'OPEN')?.id ?? '')
   const [addressId, setAddressId] = useState(addresses.find((a) => a.isDefault)?.id ?? addresses[0]?.id ?? '')
@@ -77,7 +77,7 @@ export function CheckoutWizard({
       if (orderType === 'DELIVERY') return useNewAddress ? newAddressLine.trim().length > 3 : Boolean(addressId)
       return true
     }
-    if (step === 2) return Boolean(paymentMethod) && contactName.trim().length > 1 && /^\+?[0-9\s]{8,15}$/.test(contactPhone)
+    if (step === 2) return Boolean(paymentMethod) && contactName.trim().length > 1 && PHONE_REGEX.test(contactPhone)
     return true
   }, [step, orderType, restaurantId, useNewAddress, newAddressLine, addressId, paymentMethod, contactName, contactPhone])
 
@@ -107,6 +107,7 @@ export function CheckoutWizard({
         return
       }
       clearTableSession()
+      await refresh() // server already emptied the cart — sync client state
       toast.success('Commande confirmée 🔥')
       router.push(`/order/${result.orderId}/confirmation`)
     } catch (err) {
@@ -278,15 +279,15 @@ export function CheckoutWizard({
               <Field label="Email (optionnel)" value={contactEmail} onChange={setContactEmail} />
               <Field label="Code promo (optionnel)" value={couponCode} onChange={(v) => setCouponCode(v.toUpperCase())} />
             </div>
-            <div>
-              <label className="mb-1.5 block text-xs font-bold uppercase tracking-wide">Note pour le restaurant</label>
+            <label className="block">
+              <span className="mb-1.5 block text-xs font-bold uppercase tracking-wide">Note pour le restaurant</span>
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={2}
                 className="w-full rounded-md border border-input bg-background px-3.5 py-2.5 text-sm"
               />
-            </div>
+            </label>
           </div>
         )}
 
@@ -350,15 +351,18 @@ export function CheckoutWizard({
 
 function Field({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (v: string) => void; placeholder?: string }) {
   return (
-    <div>
-      <label className="mb-1.5 block text-xs font-bold uppercase tracking-wide">{label}</label>
+    // The input is nested inside the <label> so it stays programmatically
+    // associated (screen readers, form autofill, `getByLabel` in tests)
+    // without needing to thread a unique id/htmlFor pair through.
+    <label className="block">
+      <span className="mb-1.5 block text-xs font-bold uppercase tracking-wide">{label}</span>
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         className="w-full rounded-md border border-input bg-background px-3.5 py-2.5 text-sm focus-visible:border-primary focus-visible:outline-none"
       />
-    </div>
+    </label>
   )
 }
 

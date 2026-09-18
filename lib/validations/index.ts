@@ -1,12 +1,18 @@
 import { z } from 'zod'
 
+// Accepts locally- and internationally-formatted numbers, e.g. Côte
+// d'Ivoire's "+225 07 12 34 56 78" (19 chars with spaces) — widened from an
+// earlier {8,15} cap that rejected real formatted numbers with a country
+// code and grouping spaces.
+export const PHONE_REGEX = /^\+?[0-9\s]{8,20}$/
+
 export const registerSchema = z.object({
   name: z.string().trim().min(2, 'Le nom doit contenir au moins 2 caractères').max(80),
   email: z.string().trim().email('Email invalide').toLowerCase(),
   phone: z
     .string()
     .trim()
-    .regex(/^\+?[0-9\s]{8,15}$/, 'Numéro de téléphone invalide')
+    .regex(PHONE_REGEX, 'Numéro de téléphone invalide')
     .optional()
     .or(z.literal('')),
   password: z.string().min(8, 'Le mot de passe doit contenir au moins 8 caractères').max(72),
@@ -67,7 +73,7 @@ export const checkoutSchema = z
     paymentMethod: z.enum(['MOBILE_MONEY', 'CARD', 'CASH']),
     couponCode: z.string().optional(),
     contactName: z.string().min(2, 'Nom requis'),
-    contactPhone: z.string().regex(/^\+?[0-9\s]{8,15}$/, 'Téléphone invalide'),
+    contactPhone: z.string().regex(PHONE_REGEX, 'Téléphone invalide'),
     contactEmail: z.string().email().optional().or(z.literal('')),
     notes: z.string().max(300).optional(),
   })
@@ -83,7 +89,7 @@ export const reservationSchema = z.object({
   time: z.string().min(1, 'Heure requise'),
   partySize: z.number().int().min(1).max(40),
   name: z.string().min(2, 'Nom requis'),
-  phone: z.string().regex(/^\+?[0-9\s]{8,15}$/, 'Téléphone invalide'),
+  phone: z.string().regex(PHONE_REGEX, 'Téléphone invalide'),
   email: z.string().email().optional().or(z.literal('')),
   specialRequest: z.string().max(300).optional(),
 })
@@ -108,7 +114,7 @@ export const eventRequestSchema = z.object({
   restaurantId: z.string().optional(),
   message: z.string().max(600).optional(),
   name: z.string().min(2, 'Nom requis'),
-  phone: z.string().regex(/^\+?[0-9\s]{8,15}$/, 'Téléphone invalide'),
+  phone: z.string().regex(PHONE_REGEX, 'Téléphone invalide'),
   email: z.string().email('Email invalide'),
 })
 export type EventRequestInput = z.infer<typeof eventRequestSchema>
@@ -116,7 +122,7 @@ export type EventRequestInput = z.infer<typeof eventRequestSchema>
 export const corporateRequestSchema = z.object({
   companyName: z.string().min(2, "Nom de l'entreprise requis"),
   contactName: z.string().min(2, 'Nom du contact requis'),
-  phone: z.string().regex(/^\+?[0-9\s]{8,15}$/, 'Téléphone invalide'),
+  phone: z.string().regex(PHONE_REGEX, 'Téléphone invalide'),
   email: z.string().email('Email invalide'),
   employeeCount: z.number().int().min(1).optional(),
   deliveryFrequency: z.string().optional(),

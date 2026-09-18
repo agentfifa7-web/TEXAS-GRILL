@@ -36,6 +36,42 @@ async function main() {
     await prisma.permission.upsert({ where: { key }, update: {}, create: { key, label: key } })
   }
 
+  // Mirrors the code-owned PERMISSIONS map in lib/rbac.ts, which stays the
+  // actual enforcement source (see that file's header comment) — this only
+  // populates the reference RolePermission join rows so the admin's
+  // read-only "Rôles & permissions" screen reflects real linked data.
+  const rolePermissionMap: Record<string, string[]> = {
+    'dashboard:view': ['SUPER_ADMIN', 'ADMIN', 'RESTAURANT_MANAGER', 'MARKETING_MANAGER'],
+    'orders:manage': ['SUPER_ADMIN', 'ADMIN', 'RESTAURANT_MANAGER', 'KITCHEN_MANAGER', 'CASHIER'],
+    'restaurants:manage': ['SUPER_ADMIN', 'ADMIN'],
+    'products:manage': ['SUPER_ADMIN', 'ADMIN', 'RESTAURANT_MANAGER'],
+    'stock:manage': ['SUPER_ADMIN', 'ADMIN', 'RESTAURANT_MANAGER', 'KITCHEN_MANAGER'],
+    'customers:manage': ['SUPER_ADMIN', 'ADMIN', 'MARKETING_MANAGER'],
+    'deliveries:manage': ['SUPER_ADMIN', 'ADMIN', 'DELIVERY_MANAGER'],
+    'reservations:manage': ['SUPER_ADMIN', 'ADMIN', 'RESTAURANT_MANAGER', 'CASHIER'],
+    'promotions:manage': ['SUPER_ADMIN', 'ADMIN', 'MARKETING_MANAGER'],
+    'content:manage': ['SUPER_ADMIN', 'ADMIN', 'CONTENT_MANAGER'],
+    'analytics:view': ['SUPER_ADMIN', 'ADMIN', 'MARKETING_MANAGER'],
+    'roles:manage': ['SUPER_ADMIN'],
+    'reviews:manage': ['SUPER_ADMIN', 'ADMIN', 'MARKETING_MANAGER', 'CONTENT_MANAGER'],
+    'events:manage': ['SUPER_ADMIN', 'ADMIN', 'MARKETING_MANAGER'],
+    'corporate:manage': ['SUPER_ADMIN', 'ADMIN', 'MARKETING_MANAGER'],
+  }
+  const allRoles = await prisma.role.findMany()
+  const allPermissions = await prisma.permission.findMany()
+  for (const [permissionKey, roleKeys] of Object.entries(rolePermissionMap)) {
+    const permission = allPermissions.find((p) => p.key === permissionKey)
+    if (!permission) continue
+    for (const roleKey of roleKeys) {
+      const role = allRoles.find((r) => r.key === roleKey)
+      if (!role) continue
+      const existing = await prisma.rolePermission.findFirst({ where: { roleId: role.id, permissionId: permission.id } })
+      if (!existing) {
+        await prisma.rolePermission.create({ data: { roleId: role.id, permissionId: permission.id } })
+      }
+    }
+  }
+
   // ---- Restaurants (demo data — clearly identified, editable via admin) --
   const restaurantDefs = [
     { slug: 'riviera', name: 'Texas Grill Riviera', address: 'Boulevard Latrille, Riviera 3, Abidjan', lat: 5.3644, lng: -3.9756, heroImage: restaurantImg('riviera') },
