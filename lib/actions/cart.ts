@@ -7,11 +7,7 @@ import { authOptions } from '@/lib/auth'
 import { getOrCreateCart, peekCart, mergeGuestCartIntoUser } from '@/lib/cart-session'
 import { addToCartSchema, updateCartItemSchema, type AddToCartInput } from '@/lib/validations'
 import { parseJson, toJson } from '@/lib/json'
-
-function computeItemSubtotal(unitPrice: number, quantity: number, addons: AddToCartInput['selectedAddons']) {
-  const addonsTotal = addons.reduce((sum, a) => sum + a.price * a.quantity, 0)
-  return (unitPrice + addonsTotal) * quantity
-}
+import { computeItemSubtotal, computeUnitPriceWithOptions } from '@/lib/pricing'
 
 export async function addToCartAction(input: AddToCartInput) {
   const parsed = addToCartSchema.parse(input)
@@ -19,8 +15,7 @@ export async function addToCartAction(input: AddToCartInput) {
   if (!product || !product.isAvailable) return { ok: false, error: 'Produit indisponible' }
 
   const cart = await getOrCreateCart()
-  const optionsDelta = parsed.selectedOptions.reduce((sum, o) => sum + o.priceDelta, 0)
-  const unitPrice = product.price + optionsDelta
+  const unitPrice = computeUnitPriceWithOptions(product.price, parsed.selectedOptions)
   const subtotal = computeItemSubtotal(unitPrice, parsed.quantity, parsed.selectedAddons)
 
   await prisma.cartItem.create({

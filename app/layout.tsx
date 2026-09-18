@@ -10,6 +10,7 @@ import { Footer } from '@/components/layout/footer'
 import { CartDrawer } from '@/components/layout/cart-drawer'
 import { FloatingOrderButton } from '@/components/layout/floating-order-button'
 import { AskTexasWidget } from '@/components/shared/ask-texas-widget'
+import { PwaInstall } from '@/components/shared/pwa-install'
 import './globals.css'
 
 const bebas = Bebas_Neue({ subsets: ['latin'], weight: '400', variable: '--font-display', display: 'swap' })
@@ -39,12 +40,25 @@ export const viewport: Viewport = {
   initialScale: 1,
 }
 
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Restaurant',
+  name: 'Texas Grill',
+  description: "Le goût du vrai grill, avec l'énergie d'Abidjan.",
+  servesCuisine: ['American', 'Barbecue', 'Grill'],
+  priceRange: '$$',
+  areaServed: { '@type': 'City', name: 'Abidjan' },
+  address: { '@type': 'PostalAddress', addressLocality: 'Abidjan', addressCountry: 'CI' },
+}
+
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const [session, cart] = await Promise.all([getServerSession(authOptions), getCartSummaryReadOnly()])
 
   return (
     <html lang="fr" className={`${bebas.variable} ${inter.variable}`}>
       <body className="antialiased">
+        {/* eslint-disable-next-line react/no-danger */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
         <Providers
           session={session}
           initialCart={{
@@ -60,6 +74,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           <CartDrawer />
           <FloatingOrderButton />
           <AskTexasWidget />
+          <PwaInstall />
         </Providers>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

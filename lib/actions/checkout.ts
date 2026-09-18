@@ -11,6 +11,7 @@ import { distanceKm, estimateDeliveryMinutes } from '@/lib/services/map'
 import { awardPointsForOrder } from '@/lib/loyalty'
 import { sendNotification } from '@/lib/services/notifications'
 import { generateOrderNumber } from '@/lib/constants'
+import { computeOrderTotal } from '@/lib/pricing'
 import { revalidatePath } from 'next/cache'
 
 const BASE_DELIVERY_FEE = 1000
@@ -57,7 +58,7 @@ export async function submitCheckoutAction(input: CheckoutInput) {
   const discount = coupon.discount
   if (coupon.freeDelivery) deliveryFee = 0
 
-  const total = Math.max(0, subtotal + deliveryFee - discount)
+  const total = computeOrderTotal(subtotal, deliveryFee, discount)
 
   const order = await prisma.order.create({
     data: {
