@@ -4,6 +4,7 @@ import { getServerSession } from '@/lib/auth'
 import { getProducts } from '@/lib/data/menu'
 import { getUserFavoriteIds } from '@/lib/actions/favorites'
 import { ProductCard } from '@/components/shared/product-card'
+import { PageHero } from '@/components/shared/page-hero'
 import { Baby, Cake, PartyPopper, Users } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -20,15 +21,13 @@ export default async function FamilyPage() {
 
   return (
     <div className="container-grill section-py">
-      <div className="mb-10 text-center">
-        <p className="eyebrow justify-center">En famille</p>
-        <h1 className="display-heading text-5xl sm:text-6xl">
-          Texas Grill <span className="text-fire">Family.</span>
-        </h1>
-        <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground sm:text-base">
-          Des formules pensées pour les grandes tablées : menus familiaux, menus enfants, et packs pour vos moments à partager.
-        </p>
-      </div>
+      <PageHero
+        eyebrow="En famille"
+        title={<>Texas Grill <span className="text-fire">Family.</span></>}
+        description="Des formules pensées pour les grandes tablées : menus familiaux, menus enfants, et packs pour vos moments à partager."
+        videoSrc="/videos/hero-lifestyle.mp4"
+        center
+      />
 
       <div className="mb-14 grid grid-cols-1 gap-5 sm:grid-cols-3">
         <div className="card-grill p-5">

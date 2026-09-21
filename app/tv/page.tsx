@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import { TvBrowser } from '@/components/shared/tv-browser'
+import { PageHero } from '@/components/shared/page-hero'
 import type { VIDEO_CATEGORIES } from '@/lib/constants'
 
 export const metadata: Metadata = {
@@ -16,16 +17,12 @@ export default async function TvPage() {
 
   return (
     <div className="container-grill section-py">
-      <div className="mb-8">
-        <p className="eyebrow">Texas Grill TV</p>
-        <h1 className="display-heading text-5xl sm:text-6xl">
-          Le grill en <span className="text-fire">images.</span>
-        </h1>
-        <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
-          Behind the grill, recettes maison, interviews et actualités — toute la vidéo Texas Grill sur une seule
-          plateforme.
-        </p>
-      </div>
+      <PageHero
+        eyebrow="Texas Grill TV"
+        title={<>Le grill en <span className="text-fire">images.</span></>}
+        description="Behind the grill, recettes maison, interviews et actualités — toute la vidéo Texas Grill sur une seule plateforme."
+        videoSrc="/videos/hero-grill.mp4"
+      />
 
       <TvBrowser
         videos={videos.map((v) => ({

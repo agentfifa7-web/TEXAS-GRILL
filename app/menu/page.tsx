@@ -3,6 +3,7 @@ import { getServerSession } from '@/lib/auth'
 import { getCategories, getProducts } from '@/lib/data/menu'
 import { getUserFavoriteIds } from '@/lib/actions/favorites'
 import { MenuBrowser } from '@/components/shared/menu-browser'
+import { PageHero } from '@/components/shared/page-hero'
 
 export const metadata: Metadata = {
   title: 'Menu',
@@ -20,12 +21,11 @@ export default async function MenuPage({ searchParams }: { searchParams: Promise
 
   return (
     <div className="container-grill section-py">
-      <div className="mb-8">
-        <p className="eyebrow">Au grill</p>
-        <h1 className="display-heading text-5xl sm:text-6xl">
-          Le <span className="text-fire">Menu.</span>
-        </h1>
-      </div>
+      <PageHero
+        eyebrow="Au grill"
+        title={<>Le <span className="text-fire">Menu.</span></>}
+        videoSrc="/videos/hero-grill.mp4"
+      />
       <MenuBrowser categories={categories} products={products} initialCategory={params.cat} favoriteIds={favoriteIds} />
     </div>
   )

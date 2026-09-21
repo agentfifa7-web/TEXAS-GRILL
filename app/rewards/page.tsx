@@ -7,6 +7,7 @@ import { LOYALTY_TIER_CONFIG, formatXOF, type LoyaltyTier } from '@/lib/constant
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { RewardRedeemButton } from '@/components/shared/reward-redeem-button'
+import { PageHero } from '@/components/shared/page-hero'
 import { Flame, Gift, Star, TrendingUp, Trophy } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -31,15 +32,15 @@ export default async function RewardsPage() {
   if (!session?.user?.id) {
     return (
       <div className="container-grill section-py">
-        <div className="mb-10 text-center">
-          <p className="eyebrow justify-center">Le club Texas Grill</p>
-          <h1 className="display-heading text-5xl sm:text-6xl">
-            Texas Grill <span className="text-fire">Rewards.</span>
-          </h1>
-          <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground sm:text-base">
-            Gagnez des points à chaque commande, montez en grade et débloquez des réductions permanentes et des cadeaux exclusifs.
-          </p>
-          <Link href="/login" className="btn btn-primary mt-6">
+        <PageHero
+          eyebrow="Le club Texas Grill"
+          title={<>Texas Grill <span className="text-fire">Rewards.</span></>}
+          description="Gagnez des points à chaque commande, montez en grade et débloquez des réductions permanentes et des cadeaux exclusifs."
+          videoSrc="/videos/hero-lifestyle.mp4"
+          center
+        />
+        <div className="-mt-4 mb-10 text-center">
+          <Link href="/login" className="btn btn-primary">
             Se connecter
           </Link>
         </div>
@@ -78,12 +79,11 @@ export default async function RewardsPage() {
 
   return (
     <div className="container-grill section-py">
-      <div className="mb-8">
-        <p className="eyebrow">Mon compte</p>
-        <h1 className="display-heading text-5xl sm:text-6xl">
-          Texas Grill <span className="text-fire">Rewards.</span>
-        </h1>
-      </div>
+      <PageHero
+        eyebrow="Mon compte"
+        title={<>Texas Grill <span className="text-fire">Rewards.</span></>}
+        videoSrc="/videos/hero-lifestyle.mp4"
+      />
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="space-y-8 lg:col-span-2">

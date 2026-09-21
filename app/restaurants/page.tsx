@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { getRestaurants } from '@/lib/data/restaurants'
 import { RestaurantCard } from '@/components/shared/restaurant-card'
 import { RestaurantMap } from '@/components/shared/restaurant-map'
+import { PageHero } from '@/components/shared/page-hero'
 
 export const metadata: Metadata = {
   title: 'Nos Restaurants',
@@ -16,15 +17,12 @@ export default async function RestaurantsPage() {
 
   return (
     <div className="container-grill section-py">
-      <div className="mb-8">
-        <p className="eyebrow">Où nous trouver</p>
-        <h1 className="display-heading text-5xl sm:text-6xl">
-          Nos <span className="text-fire">Restaurants.</span>
-        </h1>
-        <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
-          {restaurants.length} adresses Texas Grill à Abidjan, ouvertes au dine-in, à la livraison, au retrait et au traiteur.
-        </p>
-      </div>
+      <PageHero
+        eyebrow="Où nous trouver"
+        title={<>Nos <span className="text-fire">Restaurants.</span></>}
+        description={`${restaurants.length} adresses Texas Grill à Abidjan, ouvertes au dine-in, à la livraison, au retrait et au traiteur.`}
+        videoSrc="/videos/hero-restaurant.mp4"
+      />
 
       {points.length > 0 && (
         <div className="mb-10">

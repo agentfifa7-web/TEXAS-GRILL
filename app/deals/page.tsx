@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import { PromotionCard } from '@/components/shared/promotion-card'
 import { CouponPill } from '@/components/shared/coupon-pill'
+import { PageHero } from '@/components/shared/page-hero'
 
 export const metadata: Metadata = {
   title: 'Deals',
@@ -16,15 +17,12 @@ export default async function DealsPage() {
 
   return (
     <div className="container-grill section-py">
-      <div className="mb-8">
-        <p className="eyebrow">Bons plans</p>
-        <h1 className="display-heading text-5xl sm:text-6xl">
-          Nos <span className="text-fire">Deals.</span>
-        </h1>
-        <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
-          Promotions en cours et codes promo à utiliser dès maintenant sur votre prochaine commande.
-        </p>
-      </div>
+      <PageHero
+        eyebrow="Bons plans"
+        title={<>Nos <span className="text-fire">Deals.</span></>}
+        description="Promotions en cours et codes promo à utiliser dès maintenant sur votre prochaine commande."
+        videoSrc="/videos/hero-grill.mp4"
+      />
 
       {coupons.length > 0 && (
         <section className="mb-12">

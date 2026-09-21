@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { getRestaurants } from '@/lib/data/restaurants'
 import { ReservationForm } from '@/components/shared/reservation-form'
+import { PageHero } from '@/components/shared/page-hero'
 
 export const metadata: Metadata = {
   title: 'Réservation',
@@ -17,15 +18,13 @@ export default async function ReservationPage({
 
   return (
     <div className="container-grill section-py">
-      <div className="mb-8 text-center">
-        <p className="eyebrow justify-center">Table réservée, feu allumé</p>
-        <h1 className="display-heading text-5xl sm:text-6xl">
-          Réserver une <span className="text-fire">table.</span>
-        </h1>
-        <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground sm:text-base">
-          Choisissez votre restaurant, votre date et le nombre de convives — nous confirmons votre réservation rapidement.
-        </p>
-      </div>
+      <PageHero
+        eyebrow="Table réservée, feu allumé"
+        title={<>Réserver une <span className="text-fire">table.</span></>}
+        description="Choisissez votre restaurant, votre date et le nombre de convives — nous confirmons votre réservation rapidement."
+        videoSrc="/videos/hero-restaurant.mp4"
+        center
+      />
 
       <ReservationForm
         restaurants={restaurants.map((r) => ({ id: r.id, slug: r.slug, name: r.name }))}

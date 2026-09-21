@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { prisma } from '@/lib/prisma'
 import { Badge } from '@/components/ui/badge'
+import { PageHero } from '@/components/shared/page-hero'
 
 export const metadata: Metadata = {
   title: 'Grill Stories',
@@ -16,15 +17,12 @@ export default async function StoriesPage() {
 
   return (
     <div className="container-grill section-py">
-      <div className="mb-10">
-        <p className="eyebrow">Grill Stories</p>
-        <h1 className="display-heading text-5xl sm:text-6xl">
-          Dans les <span className="text-fire">coulisses.</span>
-        </h1>
-        <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
-          Photos, ambiances et nouveautés — plongez dans le quotidien des restaurants Texas Grill à Abidjan.
-        </p>
-      </div>
+      <PageHero
+        eyebrow="Grill Stories"
+        title={<>Dans les <span className="text-fire">coulisses.</span></>}
+        description="Photos, ambiances et nouveautés — plongez dans le quotidien des restaurants Texas Grill à Abidjan."
+        videoSrc="/videos/hero-lifestyle.mp4"
+      />
 
       {stories.length === 0 ? (
         <p className="text-sm text-muted-foreground">Aucune story pour le moment, revenez bientôt.</p>

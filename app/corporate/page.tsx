@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Briefcase, FileText, History, Receipt, Truck } from 'lucide-react'
 import { CorporateRequestForm } from '@/components/shared/corporate-request-form'
+import { PageHero } from '@/components/shared/page-hero'
 
 export const metadata: Metadata = {
   title: 'Texas Grill Business',
@@ -39,17 +40,13 @@ const FEATURES = [
 export default function CorporatePage() {
   return (
     <div className="container-grill section-py">
-      <div className="mb-10 text-center">
-        <p className="eyebrow justify-center">Texas Grill Business</p>
-        <h1 className="display-heading text-5xl sm:text-6xl">
-          Le grill au service de votre <span className="text-fire">entreprise.</span>
-        </h1>
-        <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
-          Repas d&apos;équipe, séminaires, événements internes ou livraisons récurrentes — Texas Grill Business
-          accompagne les entreprises d&apos;Abidjan avec des devis sur mesure, une livraison groupée et une
-          facturation simplifiée.
-        </p>
-      </div>
+      <PageHero
+        eyebrow="Texas Grill Business"
+        title={<>Le grill au service de votre <span className="text-fire">entreprise.</span></>}
+        description="Repas d'équipe, séminaires, événements internes ou livraisons récurrentes — Texas Grill Business accompagne les entreprises d'Abidjan avec des devis sur mesure, une livraison groupée et une facturation simplifiée."
+        videoSrc="/videos/hero-restaurant.mp4"
+        center
+      />
 
       <div className="mb-14 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {FEATURES.map(({ icon: Icon, title, description }) => (

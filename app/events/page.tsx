@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Cake, PartyPopper, Presentation, Trophy, Users, Sparkles } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { EventRequestForm } from '@/components/shared/event-request-form'
+import { PageHero } from '@/components/shared/page-hero'
 
 export const metadata: Metadata = {
   title: 'Événements',
@@ -26,17 +27,13 @@ export default async function EventsPage() {
 
   return (
     <div className="container-grill section-py">
-      <div className="mb-10 text-center">
-        <p className="eyebrow justify-center">Texas Grill Events</p>
-        <h1 className="display-heading text-5xl sm:text-6xl">
-          Célébrez au rythme du <span className="text-fire">grill.</span>
-        </h1>
-        <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
-          Anniversaires, réunions, événements sportifs, soirées privées, séminaires d&apos;entreprise ou grandes
-          célébrations — nos restaurants Texas Grill à Abidjan vous accueillent pour un événement sur mesure, du
-          menu à la décoration.
-        </p>
-      </div>
+      <PageHero
+        eyebrow="Texas Grill Events"
+        title={<>Célébrez au rythme du <span className="text-fire">grill.</span></>}
+        description="Anniversaires, réunions, événements sportifs, soirées privées, séminaires d'entreprise ou grandes célébrations — nos restaurants Texas Grill à Abidjan vous accueillent pour un événement sur mesure, du menu à la décoration."
+        videoSrc="/videos/hero-lifestyle.mp4"
+        center
+      />
 
       <div className="mb-14 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {HIGHLIGHTS.map(({ icon: Icon, title, description }) => (
