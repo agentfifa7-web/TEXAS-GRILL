@@ -52,8 +52,32 @@ const organizationJsonLd = {
   address: { '@type': 'PostalAddress', addressLocality: 'Abidjan', addressCountry: 'CI' },
 }
 
+// The root layout runs on every single request. A misconfiguration in
+// either of these (e.g. an auth provider env var issue, a transient DB
+// connection hiccup) must never take the *entire* site down with it — so
+// each is isolated and falls back to a safe default, with the real error
+// logged clearly for Vercel's Runtime Logs instead of surfacing as an
+// unhandled exception that trips the global error boundary on every route.
+async function getSessionSafely() {
+  try {
+    return await getServerSession(authOptions)
+  } catch (error) {
+    console.error('[texas-grill] getServerSession failed — continuing as signed out:', error)
+    return null
+  }
+}
+
+async function getCartSafely() {
+  try {
+    return await getCartSummaryReadOnly()
+  } catch (error) {
+    console.error('[texas-grill] getCartSummaryReadOnly failed — continuing with an empty cart:', error)
+    return { cart: null, orderType: 'DELIVERY' as const, items: [], subtotal: 0, count: 0 }
+  }
+}
+
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const [session, cart] = await Promise.all([getServerSession(authOptions), getCartSummaryReadOnly()])
+  const [session, cart] = await Promise.all([getSessionSafely(), getCartSafely()])
 
   return (
     <html lang="fr" className={`${bebas.variable} ${inter.variable}`}>
