@@ -56,14 +56,21 @@ export default async function HomePage() {
           </div>
         </div>
         <div className="relative min-h-[340px] overflow-hidden rounded-[2px_90px_2px_90px] sm:min-h-[460px] lg:min-h-[580px]">
-          <Image
-            src="/images/misc/hero.svg"
-            alt="Grillades Texas Grill au feu de bois"
-            fill
-            priority
-            className="object-cover"
-            sizes="(max-width: 1024px) 100vw, 56vw"
-          />
+          {/* Fallback image (poster) covers the "no video available" case
+              required by the spec — shown instantly and whenever the video
+              can't load/play, with zero extra client-side logic needed. */}
+          <video
+            className="absolute inset-0 h-full w-full object-cover"
+            poster="/images/misc/hero.svg"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-hidden="true"
+          >
+            <source src="/videos/hero.mp4" type="video/mp4" />
+          </video>
           <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent" />
           <div className="absolute right-6 top-6 grid size-24 rotate-12 place-items-center rounded-full bg-amber text-center text-ink shadow-lg">
             <div>
