@@ -25,7 +25,7 @@ export function TopProductsChart({ data }: { data: TopProduct[] }) {
           formatter={(value: number) => [value, 'Quantité vendue']}
           contentStyle={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 8, fontSize: 12 }}
         />
-        <Bar dataKey="quantity" fill="#f0a63f" radius={[0, 6, 6, 0]} />
+        <Bar dataKey="quantity" fill="#e0983a" radius={[0, 6, 6, 0]} />
       </BarChart>
     </ResponsiveContainer>
   )

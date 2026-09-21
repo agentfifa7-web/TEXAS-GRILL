@@ -8,7 +8,7 @@ export interface StatusSlice {
   count: number
 }
 
-const COLORS = ['#ef4c19', '#f0a63f', '#2fa768', '#b81f2b', '#34302c', '#6b6154', '#d63c10', '#ffb27a']
+const COLORS = ['#e5283a', '#e0983a', '#2fa768', '#7a1420', '#2b211e', '#6b6154', '#b81f2c', '#ff9d94']
 
 export function StatusChart({ data }: { data: StatusSlice[] }) {
   return (

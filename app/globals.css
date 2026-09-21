@@ -4,25 +4,25 @@
 @custom-variant dark (&:is(.dark *));
 
 /* -----------------------------------------------------------------------
-   TEXAS GRILL — Design tokens
-   Palette: FIRE • GRILL • URBAN • PREMIUM
-   noir profond / orange feu / rouge barbecue / crème / blanc / gris charbon
+   TEXAS GRILLZ — Design tokens
+   Palette inspired by the Texas Grillz badge logo: noir profond / rouge
+   braise (crimson-to-maroon metallic gradient) / crème / blanc / gris charbon
    ----------------------------------------------------------------------- */
 :root {
   color-scheme: light;
 
-  --ink: #15100c;
-  --ink-soft: #241d18;
-  --charcoal: #34302c;
-  --charcoal-soft: #4a443e;
+  --ink: #0b0605;
+  --ink-soft: #1c0e0d;
+  --charcoal: #2b211e;
+  --charcoal-soft: #453734;
   --cream: #f7f1e4;
   --cream-soft: #fbf7ee;
   --white: #ffffff;
-  --fire: #ef4c19;
-  --fire-strong: #d63c10;
-  --fire-soft: #ffb27a;
-  --bbq-red: #b81f2b;
-  --amber: #f0a63f;
+  --fire: #e5283a;
+  --fire-strong: #b81f2c;
+  --fire-soft: #ff9d94;
+  --bbq-red: #7a1420;
+  --amber: #e0983a;
   --success: #2fa768;
   --danger: #d63c3c;
 
@@ -55,7 +55,7 @@
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   --container-max: 1280px;
-  --shadow-card: 0 18px 40px -22px rgba(21, 16, 12, 0.35);
+  --shadow-card: 0 18px 40px -22px rgba(11, 6, 5, 0.35);
   --shadow-pop: 10px 14px 0 var(--amber);
 }
 

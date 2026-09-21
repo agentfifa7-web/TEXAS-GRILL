@@ -19,7 +19,7 @@ export function SalesChart({ data }: { data: SalesPoint[] }) {
           formatter={(value: number) => [`${new Intl.NumberFormat('fr-FR').format(value)} FCFA`, 'Ventes']}
           contentStyle={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 8, fontSize: 12 }}
         />
-        <Line type="monotone" dataKey="total" stroke="#ef4c19" strokeWidth={2.5} dot={{ r: 3, fill: '#ef4c19' }} activeDot={{ r: 5 }} />
+        <Line type="monotone" dataKey="total" stroke="#e5283a" strokeWidth={2.5} dot={{ r: 3, fill: '#e5283a' }} activeDot={{ r: 5 }} />
       </LineChart>
     </ResponsiveContainer>
   )
