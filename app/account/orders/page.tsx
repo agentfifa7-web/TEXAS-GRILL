@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { formatXOF, ORDER_STATUS_LABELS, ORDER_TYPE_LABELS, type OrderStatus, type OrderType } from '@/lib/constants'
 import { Badge } from '@/components/ui/badge'
@@ -16,7 +15,7 @@ function statusVariant(status: OrderStatus): 'success' | 'destructive' | 'amber'
 }
 
 export default async function AccountOrdersPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user?.id) redirect('/login?callbackUrl=/account/orders')
   const userId = session.user.id
 

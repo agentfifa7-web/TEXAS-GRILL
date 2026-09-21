@@ -1,12 +1,11 @@
 'use server'
 
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { redeemReward as redeemRewardService } from '@/lib/loyalty'
 import { revalidatePath } from 'next/cache'
 
 export async function redeemReward(userId: string, rewardId: string) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user?.id || session.user.id !== userId) {
     return { ok: false as const, error: 'AUTH_REQUIRED' }
   }

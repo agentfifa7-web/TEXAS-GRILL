@@ -1,12 +1,11 @@
 import { redirect } from 'next/navigation'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { BellOff } from 'lucide-react'
 import { NotificationItem } from './notification-item'
 
 export default async function AccountNotificationsPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user?.id) redirect('/login?callbackUrl=/account/notifications')
   const userId = session.user.id
 

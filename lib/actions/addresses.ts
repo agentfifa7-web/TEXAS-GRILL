@@ -2,15 +2,14 @@
 
 import type { z } from 'zod'
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
 import { addressSchema } from '@/lib/validations'
 
 export type AddressInput = z.infer<typeof addressSchema>
 
 export async function createAddressAction(input: AddressInput) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user?.id) return { ok: false as const, error: 'AUTH_REQUIRED' }
 
   const parsed = addressSchema.parse(input)
@@ -35,7 +34,7 @@ export async function createAddressAction(input: AddressInput) {
 }
 
 export async function deleteAddressAction(id: string) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user?.id) return { ok: false as const, error: 'AUTH_REQUIRED' }
 
   await prisma.address.deleteMany({ where: { id, userId: session.user.id } })
@@ -44,7 +43,7 @@ export async function deleteAddressAction(id: string) {
 }
 
 export async function setDefaultAddressAction(id: string) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user?.id) return { ok: false as const, error: 'AUTH_REQUIRED' }
 
   const address = await prisma.address.findFirst({ where: { id, userId: session.user.id } })

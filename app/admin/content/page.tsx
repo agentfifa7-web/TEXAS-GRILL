@@ -1,12 +1,11 @@
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { can } from '@/lib/rbac'
 import { AccessDenied } from '@/components/admin/access-denied'
 import { ContentManager, type AdminStory, type AdminVideo } from '@/components/admin/content-manager'
 
 export default async function AdminContentPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!can(session?.user?.role, 'content:manage')) return <AccessDenied />
 
   const [stories, videos] = await Promise.all([

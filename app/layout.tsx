@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Bebas_Neue, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { getCartSummaryReadOnly } from '@/lib/actions/cart'
 import { getSiteUrl } from '@/lib/constants'
 import { Providers } from '@/components/providers/providers'
@@ -60,7 +59,7 @@ const organizationJsonLd = {
 // unhandled exception that trips the global error boundary on every route.
 async function getSessionSafely() {
   try {
-    return await getServerSession(authOptions)
+    return await getServerSession()
   } catch (error) {
     console.error('[texas-grill] getServerSession failed — continuing as signed out:', error)
     return null

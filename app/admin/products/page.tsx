@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { can } from '@/lib/rbac'
 import { Plus, Pencil } from 'lucide-react'
@@ -13,7 +12,7 @@ import { ProductDeleteButton } from '@/components/admin/product-delete-button'
 import { formatXOF } from '@/lib/constants'
 
 export default async function AdminProductsPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!can(session?.user?.role, 'products:manage')) return <AccessDenied />
 
   const products = await prisma.product.findMany({

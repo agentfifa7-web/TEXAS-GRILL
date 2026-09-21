@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { getRestaurants } from '@/lib/data/restaurants'
 import { CheckoutWizard } from '@/components/shared/checkout-wizard'
@@ -8,7 +7,7 @@ import { CheckoutWizard } from '@/components/shared/checkout-wizard'
 export const metadata: Metadata = { title: 'Checkout' }
 
 export default async function CheckoutPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   const [restaurants, addresses, user] = await Promise.all([
     getRestaurants(),
     session?.user?.id ? prisma.address.findMany({ where: { userId: session.user.id }, orderBy: { isDefault: 'desc' } }) : Promise.resolve([]),

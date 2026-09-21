@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { getProductBySlug, getRelatedProducts } from '@/lib/data/menu'
 import { getUserFavoriteIds } from '@/lib/actions/favorites'
 import { ProductDetail } from '@/components/shared/product-detail'
@@ -22,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   const product = await getProductBySlug(slug)
   if (!product) notFound()
 

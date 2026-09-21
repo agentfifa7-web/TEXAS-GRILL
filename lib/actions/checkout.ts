@@ -1,8 +1,7 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { getOrCreateCart } from '@/lib/cart-session'
 import { checkoutSchema, type CheckoutInput } from '@/lib/validations'
 import { validateCoupon } from '@/lib/coupons'
@@ -18,7 +17,7 @@ const BASE_DELIVERY_FEE = 1000
 
 export async function submitCheckoutAction(input: CheckoutInput) {
   const parsed = checkoutSchema.parse(input)
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   const cart = await getOrCreateCart()
 
   const items = await prisma.cartItem.findMany({ where: { cartId: cart.id }, include: { product: true } })

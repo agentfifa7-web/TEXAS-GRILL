@@ -1,12 +1,11 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
 
 export async function toggleFavoriteAction(productId: string) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user?.id) return { ok: false as const, error: 'AUTH_REQUIRED' }
 
   const existing = await prisma.favorite.findUnique({

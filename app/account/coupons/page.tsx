@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { getOrCreateLoyaltyAccount } from '@/lib/loyalty'
 import { formatXOF, LOYALTY_TIER_CONFIG, type LoyaltyTier } from '@/lib/constants'
@@ -23,7 +22,7 @@ const TX_TYPE_LABELS: Record<string, string> = {
 }
 
 export default async function AccountCouponsPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user?.id) redirect('/login?callbackUrl=/account/coupons')
   const userId = session.user.id
 

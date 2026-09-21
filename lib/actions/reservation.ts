@@ -1,8 +1,7 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { reservationSchema, type ReservationInput } from '@/lib/validations'
 import { generateReservationCode } from '@/lib/constants'
 import { sendNotification } from '@/lib/services/notifications'
@@ -10,7 +9,7 @@ import { revalidatePath } from 'next/cache'
 
 export async function submitReservationAction(input: ReservationInput) {
   const parsed = reservationSchema.parse(input)
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
 
   const reservation = await prisma.reservation.create({
     data: {

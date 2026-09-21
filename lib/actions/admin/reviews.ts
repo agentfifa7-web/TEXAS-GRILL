@@ -1,7 +1,6 @@
 'use server'
 
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { can } from '@/lib/rbac'
 import { revalidatePath } from 'next/cache'
@@ -9,7 +8,7 @@ import { revalidatePath } from 'next/cache'
 type ActionResult = { ok: true } | { ok: false; error: string }
 
 async function requireReviewsManage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user || !can(session.user.role, 'reviews:manage')) return null
   return session
 }

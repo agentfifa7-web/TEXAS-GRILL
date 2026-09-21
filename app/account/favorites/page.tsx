@@ -1,14 +1,13 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { serializeProduct } from '@/lib/data/menu'
 import { ProductCard } from '@/components/shared/product-card'
 import { ArrowRight, Heart } from 'lucide-react'
 
 export default async function AccountFavoritesPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user?.id) redirect('/login?callbackUrl=/account/favorites')
   const userId = session.user.id
 

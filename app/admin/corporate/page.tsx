@@ -1,5 +1,4 @@
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { can } from '@/lib/rbac'
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
@@ -24,7 +23,7 @@ const STATUS_BADGE: Record<string, 'outline' | 'amber' | 'success' | 'destructiv
 }
 
 export default async function AdminCorporatePage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!can(session?.user?.role, 'corporate:manage')) return <AccessDenied />
 
   const requests = await prisma.corporateRequest.findMany({ orderBy: { createdAt: 'desc' } })

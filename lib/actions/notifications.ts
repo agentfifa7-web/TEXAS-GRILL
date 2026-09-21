@@ -1,12 +1,11 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
 
 export async function markNotificationReadAction(id: string) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user?.id) return { ok: false as const, error: 'AUTH_REQUIRED' }
 
   const notification = await prisma.notification.findFirst({ where: { id, userId: session.user.id } })

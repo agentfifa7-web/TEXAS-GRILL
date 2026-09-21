@@ -2,8 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { getOrCreateCart, peekCart, mergeGuestCartIntoUser } from '@/lib/cart-session'
 import { addToCartSchema, updateCartItemSchema, type AddToCartInput } from '@/lib/validations'
 import { parseJson, toJson } from '@/lib/json'
@@ -107,7 +106,7 @@ export async function getCartSummary() {
  * need to clear the guest cart cookie.
  */
 export async function mergeCartAfterLogin() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user?.id) return { ok: false as const }
   await mergeGuestCartIntoUser(session.user.id)
   return { ok: true as const }

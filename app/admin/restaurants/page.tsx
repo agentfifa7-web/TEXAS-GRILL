@@ -1,6 +1,5 @@
 import Link from 'next/link'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { can } from '@/lib/rbac'
 import { Plus, Pencil } from 'lucide-react'
@@ -14,7 +13,7 @@ const STATUS_LABEL: Record<string, string> = { OPEN: 'Ouvert', CLOSED: 'Fermé',
 const STATUS_BADGE: Record<string, 'success' | 'destructive' | 'amber'> = { OPEN: 'success', CLOSED: 'destructive', COMING_SOON: 'amber' }
 
 export default async function AdminRestaurantsPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!can(session?.user?.role, 'restaurants:manage')) return <AccessDenied />
 
   const restaurants = await prisma.restaurant.findMany({ orderBy: { name: 'asc' } })

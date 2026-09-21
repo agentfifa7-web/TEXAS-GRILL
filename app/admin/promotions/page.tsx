@@ -1,12 +1,11 @@
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { can } from '@/lib/rbac'
 import { AccessDenied } from '@/components/admin/access-denied'
 import { PromotionsManager, type AdminCoupon, type AdminPromotion } from '@/components/admin/promotions-manager'
 
 export default async function AdminPromotionsPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!can(session?.user?.role, 'promotions:manage')) return <AccessDenied />
 
   const [coupons, promotions] = await Promise.all([

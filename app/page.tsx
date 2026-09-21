@@ -1,8 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Flame, MapPin, Star } from 'lucide-react'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { getFeaturedProducts } from '@/lib/data/menu'
 import { getRestaurants } from '@/lib/data/restaurants'
 import { getUserFavoriteIds } from '@/lib/actions/favorites'
@@ -11,7 +10,7 @@ import { OrderBar } from '@/components/shared/order-bar'
 import { BRAND } from '@/lib/constants'
 
 export default async function HomePage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   const [featured, restaurants, favoriteIds] = await Promise.all([
     getFeaturedProducts(4),
     getRestaurants(),

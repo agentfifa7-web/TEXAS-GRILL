@@ -1,5 +1,4 @@
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { can } from '@/lib/rbac'
 import { formatXOF, ORDER_STATUS_LABELS, type OrderStatus } from '@/lib/constants'
@@ -14,7 +13,7 @@ import { StatusChart, type StatusSlice } from '@/components/admin/charts/status-
 import { TopProductsChart, type TopProduct } from '@/components/admin/charts/top-products-chart'
 
 export default async function AdminDashboardPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   const role = session?.user?.role
 
   if (!can(role, 'dashboard:view')) {

@@ -1,8 +1,7 @@
 'use server'
 
 import { z } from 'zod'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { can } from '@/lib/rbac'
 import { revalidatePath } from 'next/cache'
@@ -34,7 +33,7 @@ export type ProductFormInput = z.infer<typeof productSchema>
 export type ActionResult = { ok: true } | { ok: false; error: string; fieldErrors?: Record<string, string> }
 
 async function requireProductsManage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user || !can(session.user.role, 'products:manage')) return null
   return session
 }

@@ -1,8 +1,7 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { eventRequestSchema, corporateRequestSchema, type EventRequestInput, type CorporateRequestInput } from '@/lib/validations'
 
 export async function submitEventRequestAction(input: EventRequestInput) {
@@ -26,7 +25,7 @@ export async function submitEventRequestAction(input: EventRequestInput) {
 
 export async function submitCorporateRequestAction(input: CorporateRequestInput) {
   const parsed = corporateRequestSchema.parse(input)
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   await prisma.corporateRequest.create({
     data: {
       companyName: parsed.companyName,

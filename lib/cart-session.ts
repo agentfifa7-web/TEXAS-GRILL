@@ -1,8 +1,7 @@
 import 'server-only'
 import { cookies } from 'next/headers'
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { randomUUID } from 'crypto'
 
 const CART_COOKIE = 'tg_cart_session'
@@ -14,7 +13,7 @@ const CART_COOKIE = 'tg_cart_session'
  * `mergeGuestCartIntoUser` (called from the login server action).
  */
 export async function getOrCreateCart() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   const cookieStore = await cookies()
 
   if (session?.user?.id) {
@@ -42,7 +41,7 @@ export async function getOrCreateCart() {
  * which is allowed to set cookies) right after mount.
  */
 export async function peekCart() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (session?.user?.id) {
     return prisma.cart.findFirst({ where: { userId: session.user.id }, orderBy: { updatedAt: 'desc' } })
   }

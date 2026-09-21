@@ -92,7 +92,7 @@ Voir `.env.example` pour la liste complète et les commentaires. Résumé :
 | Variable | Rôle | Valeur par défaut (dev) |
 |---|---|---|
 | `DATABASE_URL` | Connexion Prisma | URL PostgreSQL (Neon/Supabase/Vercel Postgres…), aucune valeur par défaut |
-| `AUTH_SECRET` | Signature des sessions NextAuth | à générer (`openssl rand -base64 32`) |
+| `NEXTAUTH_SECRET` | Signature des sessions NextAuth (nom requis par next-auth v4 — `AUTH_SECRET` est aussi accepté en repli) | à générer (`openssl rand -base64 32`) |
 | `NEXT_PUBLIC_MAP_PROVIDER` / `MAP_API_KEY` | Cartographie (`lib/services/map.ts`) | `STATIC` (carte de secours sans clé) |
 | `PAYMENT_PROVIDER` / `PAYMENT_API_KEY` | Paiement (`lib/services/payment.ts`) | `MOCK` (paiement simulé toujours réussi) |
 | `STORAGE_PROVIDER` / `STORAGE_API_KEY` | Uploads (`lib/services/storage.ts`) | `LOCAL` |

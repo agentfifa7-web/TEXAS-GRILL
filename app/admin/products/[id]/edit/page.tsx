@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { can } from '@/lib/rbac'
 import { AccessDenied } from '@/components/admin/access-denied'
@@ -8,7 +7,7 @@ import { ProductForm, type ProductFormValues } from '@/components/admin/product-
 
 export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!can(session?.user?.role, 'products:manage')) return <AccessDenied />
 
   const [product, categories, restaurants] = await Promise.all([

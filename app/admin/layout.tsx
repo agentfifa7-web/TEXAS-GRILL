@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { ADMIN_ROLES } from '@/lib/constants'
 import { ADMIN_NAV, can } from '@/lib/rbac'
 import { AdminSidebar } from '@/components/admin/admin-sidebar'
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
 }
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
 
   if (!session?.user || !(ADMIN_ROLES as string[]).includes(session.user.role)) {
     redirect('/login?callbackUrl=/admin')

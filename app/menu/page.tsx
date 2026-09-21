@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { getCategories, getProducts } from '@/lib/data/menu'
 import { getUserFavoriteIds } from '@/lib/actions/favorites'
 import { MenuBrowser } from '@/components/shared/menu-browser'
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
 
 export default async function MenuPage({ searchParams }: { searchParams: Promise<{ cat?: string }> }) {
   const params = await searchParams
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   const [categories, products, favoriteIds] = await Promise.all([
     getCategories(),
     getProducts({}),

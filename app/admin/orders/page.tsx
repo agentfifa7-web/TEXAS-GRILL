@@ -1,12 +1,11 @@
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { can } from '@/lib/rbac'
 import { AccessDenied } from '@/components/admin/access-denied'
 import { OrdersTable, type AdminOrderRow } from '@/components/admin/orders-table'
 
 export default async function AdminOrdersPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!can(session?.user?.role, 'orders:manage')) return <AccessDenied />
 
   const [orders, restaurants] = await Promise.all([

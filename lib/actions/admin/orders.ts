@@ -1,7 +1,6 @@
 'use server'
 
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { can } from '@/lib/rbac'
 import { ORDER_STATUS } from '@/lib/constants'
@@ -11,7 +10,7 @@ import { revalidatePath } from 'next/cache'
 type ActionResult = { ok: true } | { ok: false; error: string }
 
 async function requireOrdersManage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user || !can(session.user.role, 'orders:manage')) {
     return { session: null, error: 'Permission refusée' as const }
   }

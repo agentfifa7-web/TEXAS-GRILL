@@ -1,5 +1,4 @@
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { can, PERMISSIONS } from '@/lib/rbac'
 import { ROLES, ROLE_LABELS, type RoleKey } from '@/lib/constants'
@@ -21,7 +20,7 @@ const ROLE_ORDER: RoleKey[] = [
 ]
 
 export default async function AdminRolesPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!can(session?.user?.role, 'roles:manage')) return <AccessDenied />
 
   const [roles, permissions] = await Promise.all([

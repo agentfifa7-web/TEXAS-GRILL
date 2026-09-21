@@ -1,12 +1,11 @@
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { can } from '@/lib/rbac'
 import { AccessDenied } from '@/components/admin/access-denied'
 import { ReviewCard, type AdminReview } from '@/components/admin/review-card'
 
 export default async function AdminReviewsPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!can(session?.user?.role, 'reviews:manage')) return <AccessDenied />
 
   const reviews = await prisma.review.findMany({

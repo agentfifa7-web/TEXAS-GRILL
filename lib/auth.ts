@@ -1,7 +1,17 @@
 import type { AuthOptions } from 'next-auth'
+import { getServerSession as nextAuthGetServerSession } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
+
+// next-auth v4's OWN internal config validation (used by its built-in
+// /api/auth/error page and a few other internal code paths) specifically
+// looks for `NEXTAUTH_SECRET` — independent of whatever `secret` value is
+// passed into `authOptions` below. Passing only `AUTH_SECRET` (the newer
+// Auth.js v5 convention) satisfies session signing but still trips
+// next-auth v4's internal "NO_SECRET" check. Accept both names so either
+// env var works.
+const SECRET = process.env.NEXTAUTH_SECRET ?? process.env.AUTH_SECRET
 
 // Email/password auth wired to our own User table (bcrypt-hashed passwords,
 // JWT session strategy — no adapter/session table needed). OAuth is left as
@@ -49,5 +59,20 @@ export const authOptions: AuthOptions = {
       return session
     },
   },
-  secret: process.env.AUTH_SECRET,
+  secret: SECRET,
+}
+
+/**
+ * Drop-in replacement for `getServerSession(authOptions)` that never
+ * throws — a NextAuth configuration issue (missing secret, etc.) must not
+ * crash the page calling it. Use this everywhere instead of importing
+ * `getServerSession` + `authOptions` separately.
+ */
+export async function getServerSession() {
+  try {
+    return await nextAuthGetServerSession(authOptions)
+  } catch (error) {
+    console.error('[texas-grill] getServerSession failed — continuing as signed out:', error)
+    return null
+  }
 }

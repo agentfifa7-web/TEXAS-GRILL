@@ -1,14 +1,13 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { reviewSchema, type ReviewInput } from '@/lib/validations'
 import { revalidatePath } from 'next/cache'
 
 export async function submitReviewAction(input: ReviewInput) {
   const parsed = reviewSchema.parse(input)
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!session?.user?.id) return { ok: false as const, error: 'AUTH_REQUIRED' }
 
   if (parsed.orderId) {

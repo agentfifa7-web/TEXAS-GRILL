@@ -1,5 +1,4 @@
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { can } from '@/lib/rbac'
 import { AccessDenied } from '@/components/admin/access-denied'
 import { RestaurantForm, type RestaurantFormValues } from '@/components/admin/restaurant-form'
@@ -21,7 +20,7 @@ const EMPTY: RestaurantFormValues = {
 }
 
 export default async function NewRestaurantPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   if (!can(session?.user?.role, 'restaurants:manage')) return <AccessDenied />
 
   return (

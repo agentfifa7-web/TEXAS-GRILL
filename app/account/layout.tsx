@@ -1,11 +1,10 @@
 import type { ReactNode } from 'react'
 import { redirect } from 'next/navigation'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { AccountSidebar } from '@/components/shared/account-sidebar'
 
 export default async function AccountLayout({ children }: { children: ReactNode }) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   // proxy.ts already guarantees a session on /account/*, but redirect gracefully
   // in case this layout is ever reached without one (e.g. an expired token).
   if (!session?.user?.id) redirect('/login?callbackUrl=/account')

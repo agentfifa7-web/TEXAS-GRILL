@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { getProducts } from '@/lib/data/menu'
 import { getUserFavoriteIds } from '@/lib/actions/favorites'
 import { ProductCard } from '@/components/shared/product-card'
@@ -13,7 +12,7 @@ export const metadata: Metadata = {
 }
 
 export default async function FamilyPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   const [products, favoriteIds] = await Promise.all([
     getProducts({ categorySlug: 'family-deals' }),
     getUserFavoriteIds(session?.user?.id),
